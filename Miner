@@ -1,0 +1,28 @@
+import sys
+!{sys.executable} -m pip install PyPDF2
+!{sys.executable} -m pip install Pandas
+import PyPDF2
+import pandas as pd
+import re
+
+
+main_pdf = PyPDF2.PdfFileReader('aad.pdf', 'rb')
+
+# decrypt pdf with "" as password
+if main_pdf.isEncrypted:
+    main_pdf.decrypt("")
+
+  
+p=main_pdf.getPage(0)
+
+p_text= p.extractText()
+
+# extract data line by line
+p_lines=str(p_text.splitlines())
+
+
+# Create dictionary to convert to dataframe later
+data = {
+    # Change names if ASX changes their format
+    'Entity Name' : (p_lines.split("Entity name")[-1].split("Security on which the Distribution")[0]),
+       }
